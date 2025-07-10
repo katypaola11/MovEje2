@@ -16,7 +16,7 @@ export default function GuardarScreen({ navigation }: any) {
     set(ref(db, 'estudiantes/' + cedula), {
         perfil: {
             nombre: nombreCompleto,
-            email: nombreCompleto.toLowerCase().replace(/\s+/g, '.') + "@estudiante.com",
+            email: nombreCompleto.toLowerCase() + "@estudiante.com",
             
         },
         academico: {
