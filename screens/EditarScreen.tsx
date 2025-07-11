@@ -10,9 +10,14 @@ export default function EditarScreen({ navigation }: any) {
     const [nombreCompleto, setnombreCompleto] = useState('');
     const [carrera, setcarrera] = useState('');
     const [horario, sethorario] = useState('');
+    const [estado, setestado] = useState('Aprobado');
+    const [fechaEntrega, setfechaEntrega] = useState(new Date().toLocaleDateString());
+
+
     const [notaFinal, setnotaFinal] = useState('');
 
-    function guardar() {
+    function editar() {
+
         set(ref(db, 'estudiantes/' + cedula), {
             perfil: {
                 nombre: nombreCompleto,
@@ -23,7 +28,9 @@ export default function EditarScreen({ navigation }: any) {
                 carrera: carrera,
                 horario: horario,
                 calificaciones: {
-                    notaFinal: notaFinal
+                    notaFinal: notaFinal,
+                    estado: estado,
+                    fechaEntrega: fechaEntrega,
                 }
             },
         })
@@ -34,11 +41,10 @@ export default function EditarScreen({ navigation }: any) {
         setcedula("");
         setnombreCompleto("");
         sethorario("");
+        setestado("Aprobado");
         setnotaFinal("");
+        setfechaEntrega(new Date().toLocaleDateString());
     }
-
-
-
 
 
 
@@ -61,7 +67,7 @@ export default function EditarScreen({ navigation }: any) {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Nombre Completo *</Text>
+                    <Text style={styles.label}>Nombre Completo </Text>
                     <TextInput
                         style={styles.input}
                         value={nombreCompleto}
@@ -72,7 +78,7 @@ export default function EditarScreen({ navigation }: any) {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Carrera *</Text>
+                    <Text style={styles.label}>Carrera </Text>
                     <TextInput
                         style={styles.input}
                         value={carrera}
@@ -83,7 +89,7 @@ export default function EditarScreen({ navigation }: any) {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Horario *</Text>
+                    <Text style={styles.label}>Horario </Text>
                     <TextInput
                         style={styles.input}
                         value={horario}
@@ -94,7 +100,19 @@ export default function EditarScreen({ navigation }: any) {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Nota Final *</Text>
+                    <Text style={styles.label}>Estado</Text>
+                    <TouchableOpacity
+                        style={styles.input}
+                        onPress={() => setestado(estado === 'Aprobado' ? 'Reprobado' : 'Aprobado')}
+                    >
+                        <Text style={{ color: estado === 'Aprobado' ? 'green' : 'red', fontSize: 16 }}>
+                            {estado}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Nota Final </Text>
                     <TextInput
                         style={styles.input}
                         value={notaFinal}
@@ -104,14 +122,24 @@ export default function EditarScreen({ navigation }: any) {
                         keyboardType="numeric"
                     />
                 </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Fecha de Entrega </Text>
+                    <TextInput
+                        style={styles.input}
+                        value={fechaEntrega}
+                        onChangeText={setfechaEntrega}
+                        placeholder="Fecha de entrega (DD/MM/YYYY)"
+                        placeholderTextColor="#999"
+                    />
+                </View>
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={[styles.button, styles.saveButton]}
-                        onPress={() => guardar()}
+                        onPress={() => editar()}
 
                     >
-                        <Text style={styles.buttonText}>💾 Guardar</Text>
+                        <Text style={styles.buttonText}>💾 Editar</Text>
                     </TouchableOpacity>
 
 

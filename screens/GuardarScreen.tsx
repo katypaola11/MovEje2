@@ -4,38 +4,46 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ScrollView 
 import { ref, set } from "firebase/database";
 import { db } from '../firebase/Config';
 
-export default function GuardarScreen({ navigation }: any) {
+export default function GuardarScreen() {
     const [cedula, setcedula] = useState('');
     const [nombreCompleto, setnombreCompleto] = useState('');
     const [carrera, setcarrera] = useState('');
     const [horario, sethorario] = useState('');
+    const [estado, setestado] = useState('Aprobado');
+    const [fechaEntrega, setfechaEntrega] = useState(new Date().toLocaleDateString());
+
+
     const [notaFinal, setnotaFinal] = useState('');
 
     function guardar() {
-   
-    set(ref(db, 'estudiantes/' + cedula), {
-        perfil: {
-            nombre: nombreCompleto,
-            email: nombreCompleto.toLowerCase() + "@estudiante.com",
-            
-        },
-        academico: {
-            carrera: carrera,
-            horario: horario,
-            calificaciones: {
-                notaFinal: notaFinal
-            }
-        },
-    })
-    
-    Alert.alert("El estudiante ha sido registrado exitosamente.");
-    
-    setcarrera("");
-    setcedula("");
-    setnombreCompleto("");
-    sethorario("");
-    setnotaFinal("");
-}
+
+        set(ref(db, 'estudiantes/' + cedula), {
+            perfil: {
+                nombre: nombreCompleto,
+                email: nombreCompleto.toLowerCase() + "@estudiante.com",
+
+            },
+            academico: {
+                carrera: carrera,
+                horario: horario,
+                calificaciones: {
+                    notaFinal: notaFinal,
+                    estado: estado,
+                    fechaEntrega: fechaEntrega,
+                }
+            },
+        })
+
+        Alert.alert("El estudiante ha sido registrado exitosamente.");
+
+        setcarrera("");
+        setcedula("");
+        setnombreCompleto("");
+        sethorario("");
+        setestado("Aprobado");
+        setnotaFinal("");
+        setfechaEntrega(new Date().toLocaleDateString());
+    }
 
 
 
@@ -58,7 +66,7 @@ export default function GuardarScreen({ navigation }: any) {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Nombre Completo *</Text>
+                    <Text style={styles.label}>Nombre Completo </Text>
                     <TextInput
                         style={styles.input}
                         value={nombreCompleto}
@@ -69,7 +77,7 @@ export default function GuardarScreen({ navigation }: any) {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Carrera *</Text>
+                    <Text style={styles.label}>Carrera </Text>
                     <TextInput
                         style={styles.input}
                         value={carrera}
@@ -80,7 +88,7 @@ export default function GuardarScreen({ navigation }: any) {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Horario *</Text>
+                    <Text style={styles.label}>Horario </Text>
                     <TextInput
                         style={styles.input}
                         value={horario}
@@ -91,7 +99,19 @@ export default function GuardarScreen({ navigation }: any) {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Nota Final *</Text>
+                    <Text style={styles.label}>Estado</Text>
+                    <TouchableOpacity
+                        style={styles.input}
+                        onPress={() => setestado(estado === 'Aprobado' ? 'Reprobado' : 'Aprobado')}
+                    >
+                        <Text style={{ color: estado === 'Aprobado' ? 'green' : 'red', fontSize: 16 }}>
+                            {estado}
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Nota Final </Text>
                     <TextInput
                         style={styles.input}
                         value={notaFinal}
@@ -99,6 +119,16 @@ export default function GuardarScreen({ navigation }: any) {
                         placeholder="Ingrese la nota (0-100)"
                         placeholderTextColor="#999"
                         keyboardType="numeric"
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Fecha de Entrega </Text>
+                    <TextInput
+                        style={styles.input}
+                        value={fechaEntrega}
+                        onChangeText={setfechaEntrega}
+                        placeholder="Fecha de entrega (DD/MM/YYYY)"
+                        placeholderTextColor="#999"
                     />
                 </View>
 
